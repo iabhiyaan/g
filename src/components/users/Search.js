@@ -1,57 +1,48 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-class Search extends Component {
-	state = {
-		searchText: ""
-	};
-	static propTypes = {
-		searchUsers: PropTypes.func.isRequired,
-		clearUsers: PropTypes.func.isRequired,
-		setAlert: PropTypes.func,
-		showUsers: PropTypes.bool.isRequired
-	};
-	handleChange = e => this.setState({ [e.target.name]: e.target.value });
-	handleSubmit = e => {
+const Search = ({ showUsers, clearUsers, searchUsers, setAlert }) => {
+	const [searchText, setSearchText] = useState("");
+	const handleChange = e => setSearchText(e.target.value);
+	const handleSubmit = e => {
 		e.preventDefault();
-		if (this.state.searchText === "") {
-			this.props.setAlert("Please Write Something", "light");
+		if (searchText === "") {
+			setAlert("Please Write Something", "light");
 		} else {
-			this.props.searchUsers(this.state.searchText);
-			this.setState({
-				searchText: ""
-			});
+			searchUsers(searchText);
+			setSearchText("");
 		}
 	};
-
-	render() {
-		const { showUsers, clearUsers } = this.props;
-		return (
-			<div>
-				<form className="form" onSubmit={this.handleSubmit}>
-					<input
-						type="text"
-						name="searchText"
-						id="search"
-						placeholder="Search Users..."
-						value={this.state.searchText}
-						onChange={this.handleChange}
-					/>
-					<button className="btn btn-block btn-dark" style={{ borderRadius: "30px" }}>
-						Search
-					</button>
-				</form>
-				{showUsers && (
-					<button
-						className="btn btn-block btn-primary my-1"
-						style={{ borderRadius: "30px" }}
-						onClick={clearUsers}
-					>
-						Clear Search
-					</button>
-				)}
-			</div>
-		);
-	}
-}
-
+	return (
+		<div>
+			<form className="form" onSubmit={handleSubmit}>
+				<input
+					type="text"
+					name="searchText"
+					id="search"
+					placeholder="Search Users..."
+					value={searchText}
+					onChange={handleChange}
+				/>
+				<button className="btn btn-block btn-dark" style={{ borderRadius: "30px" }}>
+					Search
+				</button>
+			</form>
+			{showUsers && (
+				<button
+					className="btn btn-block btn-primary my-1"
+					style={{ borderRadius: "30px" }}
+					onClick={clearUsers}
+				>
+					Clear Search
+				</button>
+			)}
+		</div>
+	);
+};
+Search.propTypes = {
+	searchUsers: PropTypes.func.isRequired,
+	clearUsers: PropTypes.func.isRequired,
+	setAlert: PropTypes.func,
+	showUsers: PropTypes.bool.isRequired
+};
 export default Search;
