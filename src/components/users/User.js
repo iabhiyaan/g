@@ -1,8 +1,11 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "../layouts/Spinner";
 import Repos from "../repos/Repos";
-const User = ({ loading, repos, user, getUsers, getUsersRepos, match }) => {
+import GithubContext from "../../context/github/githubContext";
+const User = ({ match }) => {
+	const githubContext = useContext(GithubContext);
+	const { user, getUsers, loading, getUsersRepos } = githubContext;
 	useEffect(() => {
 		getUsers(match.params.login);
 		getUsersRepos(match.params.login);
@@ -94,7 +97,7 @@ const User = ({ loading, repos, user, getUsers, getUsersRepos, match }) => {
 				<div className="badge badge-light">Public Repos: {public_repos}</div>
 				<div className="badge badge-dark">Public Gists: {public_gists}</div>
 			</div>
-			<Repos repos={repos} />
+			<Repos />
 		</Fragment>
 	);
 };
